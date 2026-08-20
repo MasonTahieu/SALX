@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # 1. MongoDB với Replica Set
+  mongodb:
+    image: mongo:4.4
+    platform: linux/amd64
+    container_name: carbon_mongodb
+    ports:
+      - "27018:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - carbon_db_data:/data/db
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 20s
+
+  # 2. Redis
+  redis:
+    image: redis:alpine
+    container_name: carbon_redis
+    ports:
+      - "6379:6379"
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # 3. Khởi tạo Replica Set
+  mongo-init:
+    image: mongo:4.4
+    platform: linux/amd64
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        echo "==> Kiem tra trang thai Replica Set..."
+
+        # [FIX 1] Dung ok===1 thay vi try/catch vi rs.status() khong throw exception
+        mongo --host mongodb:27017 --eval '
+          var s = rs.status();
+          if (s.ok === 1) {
+            print("==> RS da duoc khoi tao tu truoc, bo qua.");
+          } else {
+            print("==> Chua co RS config (ok=" + s.ok + "), dang khoi tao...");
+            var r = rs.initiate({_id: "rs0", members: [{_id: 0, host: "mongodb:27017"}]});
+            print("==> Ket qua initiate: " + JSON.stringify(r));
+          }
+        '
+
+        # [FIX 2] Cho den khi PRIMARY duoc bau xong moi thoat
+        echo "==> Dang cho PRIMARY duoc bau chon..."
+        until mongo --host mongodb:27017 --quiet \
+              --eval 'db.adminCommand({isMaster:1}).ismaster' \
+              2>/dev/null | grep -q true; do
+          echo "    Chua co PRIMARY, thu lai sau 3 giay..."
+          sleep 3
+        done
+        echo "==> PRIMARY da san sang! Backend co the ket noi."
+    restart: on-failure
+
+  # 4. Backend Node.js
+  app:
+    build: .
+    container_name: carbon_backend
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongodb:27017/carbon_project?replicaSet=rs0
+      - REDIS_URL=redis://carbon_redis:6379
+      - PINATA_JWT=${PINATA_JWT}
+      - PINATA_API_KEY=${PINATA_API_KEY}
+      - PINATA_SECRET_API_KEY=${PINATA_SECRET_API_KEY}
+      - IPFS_GATEWAY_URL=${IPFS_GATEWAY_URL}
+      - RPC_URL=${RPC_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - SAL_CONTRACT_ADDRESS=${SAL_CONTRACT_ADDRESS}
+      - MARKETPLACE_CONTRACT_ADDRESS=${MARKETPLACE_CONTRACT_ADDRESS}
+      - GREEN_CERTIFICATE_SBT_ADDRESS=${GREEN_CERTIFICATE_SBT_ADDRESS}
+      - SAL_DEPLOYMENT_BLOCK=${SAL_DEPLOYMENT_BLOCK}
+      - MARKETPLACE_DEPLOYMENT_BLOCK=${MARKETPLACE_DEPLOYMENT_BLOCK}
+      - CERTIFICATE_DEPLOYMENT_BLOCK=${CERTIFICATE_DEPLOYMENT_BLOCK}
+      - BLOCKCHAIN_CONFIRMATIONS=${BLOCKCHAIN_CONFIRMATIONS}
+      - BLOCKCHAIN_SYNC_INTERVAL_MS=${BLOCKCHAIN_SYNC_INTERVAL_MS}
+      - ADMIN_SECRET_KEY=${ADMIN_SECRET_KEY}
+      - ADMIN_PRIVATE_KEY=${ADMIN_PRIVATE_KEY}
+      - METADATA_SIGNER_PRIVATE_KEY=${METADATA_SIGNER_PRIVATE_KEY}
+      - METADATA_SIGNATURE_TTL_SECONDS=${METADATA_SIGNATURE_TTL_SECONDS:-900}
+      - VALIDATOR_PRIVATE_KEY=${VALIDATOR_PRIVATE_KEY}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  
+      mongo-init:
+        condition: service_completed_successfully
+    restart: on-failure
+
+volumes:
+  carbon_db_data:
+  node_modules:

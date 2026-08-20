@@ -1,0 +1,34 @@
+{
+  "name": "token-carbonx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node scripts/check-config.js",
+    "migrate:sal-v2": "node scripts/migrate-sal-v2.js",
+    "test:project-metadata": "node scripts/test-project-metadata.js",
+    "check:syntax": "node scripts/check-syntax.js",
+    "test:project-routes": "node scripts/test-project-routes.js",
+    "test:backend": "npm run check:syntax && npm run test:project-metadata && npm run test:project-routes && npm run test:health",
+    "test:health": "node scripts/test-health-service.js",
+    "migrate:index-v3": "node scripts/migrate-index-v3.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "axios": "^1.16.1",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.16.0",
+    "express": "^5.2.1",
+    "form-data": "^4.0.5",
+    "http-proxy-middleware": "^4.1.0",
+    "mongoose": "^9.6.3",
+    "multer": "^2.1.1",
+    "redis": "^6.0.0"
+  }
+}

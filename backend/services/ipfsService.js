@@ -1,0 +1,122 @@
+const axios = require('axios');
+const FormData = require('form-data');
+
+const PINATA_JSON_ENDPOINT = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
+const PINATA_FILE_ENDPOINT = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
+
+const getPinataHeaders = () => {
+  if (process.env.PINATA_JWT) {
+    return { Authorization: `Bearer ${process.env.PINATA_JWT}` };
+  }
+
+  if (!process.env.PINATA_API_KEY || !process.env.PINATA_SECRET_API_KEY) {
+    throw new Error('Thiếu PINATA_JWT hoặc PINATA_API_KEY/PINATA_SECRET_API_KEY');
+  }
+
+  return {
+    pinata_api_key: process.env.PINATA_API_KEY,
+    pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
+  };
+};
+
+const normalizeIpfsUri = (value) => {
+  if (!value) return null;
+  if (value.startsWith('ipfs://')) return value;
+  if (/^[a-zA-Z0-9]+$/.test(value)) return `ipfs://${value}`;
+  return value;
+};
+
+const extractIpfsCid = (uri) => {
+  if (!uri) return null;
+  if (uri.startsWith('ipfs://')) {
+    return uri.slice('ipfs://'.length).split('/')[0];
+  }
+  const marker = '/ipfs/';
+  const index = uri.indexOf(marker);
+  if (index >= 0) return uri.slice(index + marker.length).split('/')[0];
+  return null;
+};
+
+const ipfsToHttp = (uri) => {
+  if (!uri) return null;
+  if (!uri.startsWith('ipfs://')) return uri;
+
+  const gateway = (process.env.IPFS_GATEWAY_URL || 'https://gateway.pinata.cloud/ipfs')
+    .replace(/\/$/, '');
+  const path = uri.slice('ipfs://'.length);
+  return `${gateway}/${path}`;
+};
+
+const pinJSONToIPFS = async (content, name = 'carbox-metadata.json') => {
+  const response = await axios.post(
+    PINATA_JSON_ENDPOINT,
+    {
+      pinataContent: content,
+      pinataMetadata: { name },
+      pinataOptions: { cidVersion: 1 },
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        ...getPinataHeaders(),
+      },
+      timeout: 30000,
+    }
+  );
+
+  return {
+    cid: response.data.IpfsHash,
+    uri: `ipfs://${response.data.IpfsHash}`,
+    timestamp: response.data.Timestamp,
+  };
+};
+
+const pinBufferToIPFS = async ({ buffer, filename, contentType }) => {
+  const formData = new FormData();
+  formData.append('file', buffer, { filename, contentType });
+  formData.append('pinataOptions', JSON.stringify({ cidVersion: 1 }));
+  formData.append('pinataMetadata', JSON.stringify({ name: filename }));
+
+  const response = await axios.post(PINATA_FILE_ENDPOINT, formData, {
+    headers: {
+      ...formData.getHeaders(),
+      ...getPinataHeaders(),
+    },
+    maxBodyLength: Infinity,
+    timeout: 30000,
+  });
+
+  return {
+    cid: response.data.IpfsHash,
+    uri: `ipfs://${response.data.IpfsHash}`,
+    timestamp: response.data.Timestamp,
+  };
+};
+
+const fetchJSONFromURI = async (uri) => {
+  if (!uri) return null;
+
+  try {
+    const response = await axios.get(ipfsToHttp(uri), {
+      timeout: 15000,
+      headers: { Accept: 'application/json' },
+    });
+
+    if (response.data && typeof response.data === 'object') {
+      return response.data;
+    }
+    return null;
+  } catch (error) {
+    console.warn(`⚠️ Không thể tải metadata từ ${uri}: ${error.message}`);
+    return null;
+  }
+};
+
+module.exports = {
+  extractIpfsCid,
+  fetchJSONFromURI,
+  ipfsToHttp,
+  normalizeIpfsUri,
+  pinBufferToIPFS,
+  pinJSONToIPFS,
+};

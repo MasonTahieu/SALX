@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Syne:wght@700;800&family=Sora:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Unbounded:wght@900&display=swap');
+@import "tailwindcss";
+
+/* ===================================================================
+   Design tokens — dark (default)
+=================================================================== */
+:root {
+  /* Core palette */
+  --bg:#0b1311; --surf:#101c18; --surf2:#162119;
+  --ink:#ede7dc; --mut:#9ea5a8; --faint:#8ba69b;
+  --g:#2dc922; --gd:rgba(45,201,34,.18); --gb:rgba(45,201,34,.08);
+  --bd:rgba(237,231,220,.12); --bd2:rgba(237,231,220,.22);
+  --bd-soft:rgba(237,231,220,.10); --bd-mid:rgba(237,231,220,.14); --bd-str:rgba(237,231,220,.18);
+  --hdr:rgba(11,19,17,.92); --org:#e8913c; --gold:#e7c765;
+  /* Typography */
+  --font-display:'Syne',sans-serif;
+  --font-body:'Sora',sans-serif;
+  --font-mono:'IBM Plex Mono','JetBrains Mono',monospace;
+  --logo-filter:none;
+  --hero-glow:0 0 30px rgba(45,201,34,.22);
+  /* Compat aliases — phased out as pages are redesigned */
+  --sal-bg:var(--bg); --sal-surface:var(--surf); --sal-surface-soft:var(--surf2);
+  --sal-text:var(--ink); --sal-muted:var(--mut);
+  --sal-primary:var(--g); --sal-primary-strong:#1a9e14;
+  --sal-border:var(--bd); --sal-danger:#e25b50; --sal-warning:#e2aa48;
+  --sal-header:var(--hdr); --sal-input:var(--surf2);
+  --sal-shadow:0 22px 70px rgba(0,0,0,.28); --sal-radius:12px;
+}
+
+/* ===================================================================
+   Light mode overrides (toggle via data-theme="light" on <html>)
+=================================================================== */
+[data-theme="light"] {
+  --bg:#F1EFE7; --surf:#eff2ef; --surf2:#e5eae5;
+  --ink:#0f1c0e; --mut:#516851; --faint:#7a8e7a;
+  --g:#138f0e; --gd:rgba(19,143,14,.13); --gb:rgba(19,143,14,.07);
+  --bd:rgba(15,28,14,.18); --bd2:rgba(15,28,14,.28);
+  --bd-soft:rgba(15,28,14,.12); --bd-mid:rgba(15,28,14,.16); --bd-str:rgba(15,28,14,.20);
+  --hdr:rgba(241,239,231,.92);
+  --logo-filter:brightness(0) saturate(100%);
+  --hero-glow:0 0 30px rgba(19,143,14,.15);
+  /* Compat */
+  --sal-primary:#138f0e; --sal-bg:var(--bg); --sal-surface:var(--surf);
+  --sal-surface-soft:var(--surf2); --sal-text:var(--ink); --sal-muted:var(--mut);
+  --sal-border:var(--bd); --sal-header:var(--hdr); --sal-input:var(--surf);
+  --sal-shadow:0 18px 56px rgba(3,52,38,.07); --sal-radius:12px;
+}
+
+/* ── Light mode: hardcoded-dark overrides ── */
+[data-theme="light"] .sal-hero {
+  background: radial-gradient(circle at 75% 30%,rgba(19,143,14,.12),transparent 30%),
+              linear-gradient(135deg,#e8f4e8,#d4ecda 55%,#e8f4e8);
+  color: var(--ink);
+  border-color: rgba(19,143,14,.22);
+  box-shadow: 0 24px 80px rgba(19,143,14,.08);
+}
+[data-theme="light"] .sal-hero:after {
+  border-color: rgba(19,143,14,.18);
+  box-shadow: 0 0 0 38px rgba(19,143,14,.04), 0 0 0 76px rgba(19,143,14,.02);
+}
+[data-theme="light"] .market-project-cover {
+  background: linear-gradient(135deg,#c8e8d0,#a8d4b8);
+}
+[data-theme="light"] .market-project-cover:after {
+  background: linear-gradient(to top,rgba(15,28,14,.38),transparent 60%);
+}
+[data-theme="light"] .market-project-placeholder {
+  background: radial-gradient(circle at 70% 20%,rgba(19,143,14,.18),transparent 30%),
+              linear-gradient(135deg,#c8e8d0,#a8d4b8);
+  color: #0f1c0e;
+}
+[data-theme="light"] .market-project-placeholder span { color: rgba(15,28,14,.8); }
+[data-theme="light"] .market-project-placeholder small { color: rgba(15,28,14,.5); }
+
+/* ===================================================================
+   Global resets
+=================================================================== */
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;min-width:320px;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-synthesis:none;transition:background .2s,color .2s;overflow-x:hidden}
+button,input,textarea,select{font:inherit;color:inherit} a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+
+/* ===================================================================
+   Legacy utility classes — kept for compat during redesign
+=================================================================== */
+.sal-shell{width:min(1240px,calc(100% - 32px));margin-inline:auto}.sal-card{background:var(--sal-surface);border:1px solid var(--sal-border);border-radius:var(--sal-radius);box-shadow:var(--sal-shadow)}
+.sal-label{display:block;margin-bottom:6px;font-size:13px;font-weight:800;color:var(--sal-muted)}.sal-input{width:100%;border:1px solid var(--sal-border);border-radius:13px;background:var(--sal-input);color:var(--sal-text);padding:11px 13px;outline:none;transition:.18s}.sal-input:focus{border-color:var(--sal-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--sal-primary) 14%,transparent)}.sal-grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.sal-modal{background:var(--sal-surface);border:1px solid var(--sal-border);border-radius:24px;box-shadow:0 30px 100px rgba(0,0,0,.35)}.icon-button{display:grid;height:40px;min-width:40px;place-items:center;border:1px solid var(--sal-border);border-radius:12px;background:var(--sal-surface);color:var(--sal-text);font-size:13px;font-weight:900;transition:.18s}.icon-button:hover{background:var(--sal-surface-soft)}
+.wallet-choice{display:flex;width:100%;align-items:center;gap:13px;border:1px solid var(--sal-border);border-radius:16px;background:var(--sal-surface);padding:14px;transition:.18s}.wallet-choice:hover{border-color:var(--sal-primary);background:var(--sal-surface-soft)}.wallet-choice-icon{display:grid;height:44px;width:44px;flex:none;place-items:center;border-radius:13px;background:linear-gradient(145deg,#086247,#11c57d);color:#fff;font-weight:1000}
+.sal-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 75% 30%,color-mix(in srgb,var(--sal-primary) 24%,transparent),transparent 30%),linear-gradient(135deg,#031713,#062b22 55%,#031713);color:#fff;border:1px solid rgba(38,213,148,.22);border-radius:28px;box-shadow:0 24px 80px rgba(0,61,43,.25)}.sal-hero:after{content:"";position:absolute;right:-80px;bottom:-110px;width:330px;height:330px;border:1px solid rgba(39,224,158,.15);border-radius:50%;box-shadow:0 0 0 38px rgba(39,224,158,.04),0 0 0 76px rgba(39,224,158,.025)}
+.sal-empty-state{display:flex;min-height:210px;flex-direction:column;align-items:center;justify-content:center;border:1px dashed var(--sal-border);border-radius:18px;background:color-mix(in srgb,var(--sal-surface-soft) 55%,transparent);padding:28px;text-align:center}.sal-empty-icon{display:grid;height:42px;width:42px;place-items:center;margin-bottom:10px;border-radius:13px;background:var(--sal-surface-soft);color:var(--sal-primary);font-size:24px;font-weight:900}.sal-meta-pill{display:inline-flex;align-items:center;border:1px solid var(--sal-border);border-radius:999px;background:var(--sal-surface-soft);padding:5px 9px;color:var(--sal-muted);font-size:10px;font-weight:800}.hero-proof-pill{border:1px solid rgba(255,255,255,.13);border-radius:999px;background:rgba(255,255,255,.06);padding:6px 10px}.line-clamp-2{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.market-toolbar{display:grid;gap:12px}@media(min-width:768px){.market-toolbar{grid-template-columns:minmax(260px,1fr) 190px 190px;align-items:end}}.market-overview-card{padding:16px!important}.market-overview-card span{display:block;color:var(--sal-muted);font-size:12px;font-weight:700}.market-overview-card strong{display:block;margin-top:6px;font-size:20px;font-weight:900}.market-listing-card{padding:0!important;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.market-listing-card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--sal-primary) 38%,var(--sal-border));box-shadow:0 24px 70px color-mix(in srgb,var(--sal-primary) 10%,transparent)}.market-project-cover{position:relative;height:158px;overflow:hidden;border-bottom:1px solid var(--sal-border);background:linear-gradient(135deg,#06251e,#0b4939)}.market-project-cover>img{height:100%;width:100%;object-fit:cover}.market-project-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(2,14,11,.56),transparent 60%);pointer-events:none}.market-project-placeholder{display:flex;height:100%;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 70% 20%,rgba(38,221,151,.28),transparent 30%),linear-gradient(135deg,#042019,#0a3d31);color:#caffec}.market-project-placeholder span{font-size:26px;font-weight:1000;letter-spacing:.18em}.market-project-placeholder small{margin-top:5px;opacity:.5;letter-spacing:.16em}.market-metric{border-radius:12px;background:var(--sal-surface-soft);padding:10px 11px}.market-metric span{display:block;color:var(--sal-muted);font-size:10px;font-weight:700}.market-metric b{display:block;margin-top:3px;font-size:12px}
+.retire-rule-banner{display:grid;gap:12px;border:1px solid color-mix(in srgb,var(--sal-primary) 32%,var(--sal-border));border-radius:18px;background:linear-gradient(110deg,color-mix(in srgb,var(--sal-primary) 10%,var(--sal-surface)),var(--sal-surface));padding:16px}@media(min-width:640px){.retire-rule-banner{grid-template-columns:1fr auto auto;align-items:center}}.retire-rule-banner>div:first-child strong,.retire-rule-banner>div:first-child span{display:block}.retire-rule-banner>div:first-child span{margin-top:3px;color:var(--sal-muted);font-size:12px}.retire-rule-metric{min-width:86px;border-left:1px solid var(--sal-border);padding-left:16px}.retire-rule-metric b,.retire-rule-metric span{display:block}.retire-rule-metric b{font-size:22px;color:var(--sal-primary)}.retire-rule-metric span{font-size:10px;color:var(--sal-muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.retire-source{border:1px solid var(--sal-border);border-radius:16px;background:var(--sal-surface);padding:15px;transition:.18s}.retire-source:hover{border-color:color-mix(in srgb,var(--sal-primary) 35%,var(--sal-border))}.retire-source.is-selected{border-color:var(--sal-primary);background:color-mix(in srgb,var(--sal-primary) 6%,var(--sal-surface));box-shadow:0 0 0 3px color-mix(in srgb,var(--sal-primary) 8%,transparent)}.retire-source.is-disabled{opacity:.58}.retire-check{display:grid;height:25px;width:25px;flex:none;place-items:center;border:1px solid var(--sal-border);border-radius:8px;background:var(--sal-surface-soft);color:white;font-size:12px;font-weight:900}.retire-check.is-selected{border-color:var(--sal-primary);background:var(--sal-primary)}
+.market-hero-stat{border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:14px 16px;backdrop-filter:blur(4px)}.market-hero-stat span{display:block;font-size:11px;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em}.market-hero-stat strong{display:block;margin-top:5px;font-size:20px;font-weight:900;color:#fff}.market-hero-stat__skeleton{display:inline-block;height:24px;width:64px;border-radius:8px;background:rgba(255,255,255,.12);animation:market-shimmer 1.4s infinite}
+.market-supply-bar{height:5px;overflow:hidden;border-radius:99px;background:var(--sal-border)}.market-supply-bar__fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sal-primary),color-mix(in srgb,var(--sal-primary) 60%,#42d6ff));transition:width .4s ease}
+.market-card-skeleton{border-radius:var(--sal-radius);border:1px solid var(--sal-border);background:var(--sal-surface);overflow:hidden}.market-card-skeleton__cover{height:158px;background:linear-gradient(90deg,var(--sal-surface-soft) 25%,color-mix(in srgb,var(--sal-surface-soft) 60%,var(--sal-border)) 50%,var(--sal-surface-soft) 75%);background-size:200% 100%;animation:market-shimmer 1.4s infinite}.market-card-skeleton__line{height:12px;border-radius:99px;margin-bottom:4px;background:linear-gradient(90deg,var(--sal-surface-soft) 25%,color-mix(in srgb,var(--sal-surface-soft) 60%,var(--sal-border)) 50%,var(--sal-surface-soft) 75%);background-size:200% 100%;animation:market-shimmer 1.4s infinite}
+@keyframes market-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.leader-rank-card{position:relative;overflow:hidden;padding:20px;border-radius:20px;border:1px solid var(--sal-border);background:var(--sal-surface);display:flex;flex-direction:column;gap:4px;transition:.18s}
+.leader-rank-card--featured{border-color:color-mix(in srgb,var(--sal-primary) 40%,var(--sal-border));background:color-mix(in srgb,var(--sal-primary) 6%,var(--sal-surface));box-shadow:0 8px 32px color-mix(in srgb,var(--sal-primary) 12%,transparent)}
+.portfolio-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;background:var(--sal-surface);transition:.18s;cursor:pointer}
+.portfolio-row:hover{background:var(--sal-surface-soft)}
+.portfolio-row.is-selected{background:color-mix(in srgb,var(--sal-primary) 5%,var(--sal-surface))}
+@media(max-width:640px){.sal-shell{width:min(100% - 22px,1240px)}.sal-card{border-radius:17px}.sal-hero{border-radius:22px}}
+.sal-network-button,.sal-wallet-account-button{display:flex;align-items:center;gap:9px;height:42px;padding:0 12px;border:1px solid var(--sal-border);border-radius:14px;background:var(--sal-surface);color:var(--sal-text);box-shadow:0 8px 30px rgba(0,0,0,.06);transition:.18s}.sal-network-button:hover,.sal-wallet-account-button:hover{border-color:color-mix(in srgb,var(--sal-primary) 55%,var(--sal-border));background:var(--sal-surface-soft)}
+.sal-network-icon{display:grid;height:24px;width:24px;flex:none;place-items:center;border-radius:50%;color:#fff;font-size:12px;font-weight:1000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.sal-wallet-avatar,.sal-account-avatar{display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#ffb347,#f08a22);color:#0f140f;font-weight:1000}
+.sal-wallet-avatar{height:26px;width:26px;font-size:14px}.sal-account-avatar{height:70px;width:70px;font-size:34px;border:5px solid rgba(255,255,255,.55);box-shadow:0 12px 24px rgba(0,0,0,.12)}
+.sal-network-menu{position:absolute;right:0;top:50px;z-index:120;width:360px;max-width:min(92vw,360px);padding:18px;background:#fff;color:#20252b;border:1px solid #dfe3e8;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+.sal-network-menu-title{font-size:18px;font-weight:900}.sal-network-close,.sal-account-close{position:absolute;right:14px;top:12px;height:30px;width:30px;border-radius:50%;border:0;background:#eef0f2;color:#6d7378;font-weight:900;cursor:pointer}.sal-network-option{display:flex;width:100%;align-items:center;gap:12px;padding:11px 10px;border:0;border-radius:13px;background:transparent;color:#2b3036;transition:.15s;cursor:pointer}.sal-network-option:hover{background:#f1f4f7}.sal-network-option.is-selected{background:#1b78f2;color:#fff}.sal-network-option.is-selected:hover{background:#1b78f2}.sal-network-connected{font-size:11px;font-weight:900;opacity:.9}.sal-network-menu .sal-network-icon{height:30px;width:30px;font-size:13px}
+.sal-account-menu{position:absolute;right:0;top:50px;z-index:125;width:310px;max-width:min(92vw,310px);padding-top:4px;background:var(--sal-surface);border:1px solid var(--sal-border);border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.24);overflow:hidden}.sal-account-action{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:0;border-radius:13px;background:var(--sal-surface-soft);color:var(--sal-text);font-size:13px;font-weight:900;cursor:pointer}.sal-account-action:hover{filter:brightness(.97)}
+@media (max-width: 640px){.sal-network-menu{position:fixed;right:12px;top:74px}.sal-account-menu{position:fixed;right:12px;top:74px}.sal-network-button{padding-inline:10px}.sal-network-button .sal-network-icon{height:22px;width:22px}}
+
+/* ===================================================================
+   Animations
+=================================================================== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes home-mark-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes certGlow{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,201,34,.45)}70%{box-shadow:0 0 0 8px rgba(45,201,34,0)}100%{box-shadow:0 0 0 0 rgba(45,201,34,0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===================================================================
+   Scroll-reveal
+=================================================================== */
+.dc-reveal{opacity:0}
+.dc-reveal.is-visible{animation:fadeUp .45s ease both}
+
+/* ===================================================================
+   Full-bleed dark page wrapper (HomePage, RetirePage, etc.)
+=================================================================== */
+.home-dc{width:100vw;margin-left:calc(50% - 50vw);margin-top:-32px;background:var(--bg);color:var(--ink);overflow-x:hidden}
+.home-dc-section{max-width:1120px;margin:0 auto;padding:0 34px}
+.home-dc-link{transition:border-color .2s,background .2s}
+.home-dc-link:hover{border-color:rgba(45,201,34,.4)!important;background:rgba(45,201,34,.05)!important}
+.home-dc button{transition:opacity .15s ease,transform .15s ease,border-color .15s ease,background-color .15s ease}
+.home-dc button:hover{opacity:.88}
+.home-dc button:active{opacity:.72;transform:scale(.98)}
+.home-dc-btn{transition:opacity .15s ease,transform .15s ease!important}
+.home-dc-btn:hover{opacity:.88}
+.home-dc-btn:active{opacity:.72;transform:scale(.98)}
+.home-dc-card{transition:transform .2s ease}
+.home-dc-card:hover{transform:translateY(-4px)}
+@media(max-width:768px){.home-dc-grid-copy{grid-template-columns:1fr!important;gap:32px!important}.home-dc-grid-2col{grid-template-columns:1fr!important;gap:32px!important}.home-dc-scroller article{flex-basis:78vw!important}.home-dc-section{padding-left:20px!important;padding-right:20px!important}}
+
+/* ===================================================================
+   Marketplace DC layout
+=================================================================== */
+.market-dc-layout{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start}
+.market-dc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.market-dc-card:hover{transform:translateY(-3px);border-color:rgba(45,201,34,.35)!important}
+.market-dc-skeleton-cover{aspect-ratio:1.16/1;border-radius:8px;background:linear-gradient(90deg,var(--surf) 25%,var(--surf2) 50%,var(--surf) 75%);background-size:200% 100%;animation:market-shimmer 1.4s infinite}
+.market-dc-skeleton-line{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--surf) 25%,var(--surf2) 50%,var(--surf) 75%);background-size:200% 100%;animation:market-shimmer 1.4s infinite}
+@media(max-width:900px){.market-dc-layout{grid-template-columns:1fr}.market-dc-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.market-dc-grid{grid-template-columns:1fr}}
