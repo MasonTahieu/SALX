@@ -12,6 +12,7 @@
   --bd:rgba(237,231,220,.12); --bd2:rgba(237,231,220,.22);
   --bd-soft:rgba(237,231,220,.10); --bd-mid:rgba(237,231,220,.14); --bd-str:rgba(237,231,220,.18);
   --hdr:rgba(11,19,17,.92); --org:#e8913c; --gold:#e7c765;
+  --admin-page-gold:var(--gold);
   /* Typography */
   --font-display:'Syne',sans-serif;
   --font-body:'Sora',sans-serif;
@@ -37,6 +38,7 @@
   --bd:rgba(15,28,14,.18); --bd2:rgba(15,28,14,.28);
   --bd-soft:rgba(15,28,14,.12); --bd-mid:rgba(15,28,14,.16); --bd-str:rgba(15,28,14,.20);
   --hdr:rgba(241,239,231,.92);
+  --admin-page-gold:#765600;
   --logo-filter:brightness(0) saturate(100%);
   --hero-glow:0 0 30px rgba(19,143,14,.15);
   /* Compat */

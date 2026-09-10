@@ -19,6 +19,9 @@ const MUT = '#9ea5a8';
 const RED = '#e05252';
 const ORG = '#e8913c';
 const GOLD = '#e7c765';
+const PAGE_INK = 'var(--ink)';
+const PAGE_MUT = 'var(--mut)';
+const PAGE_GOLD = 'var(--admin-page-gold)';
 
 function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -354,8 +357,8 @@ export function AdminPage() {
         <div className="home-dc-section" style={{ padding: '80px 34px', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '.14em', color: RED, textTransform: 'uppercase' }}>ADMIN DASHBOARD</span>
-            <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 28, color: INK, margin: '10px 0 6px' }}>Enter admin key</h1>
-            <p style={{ fontFamily: MONO, fontSize: 10, color: MUT, marginBottom: 24 }}>Access is gated. Your key is stored only in sessionStorage.</p>
+            <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 28, color: PAGE_INK, margin: '10px 0 6px' }}>Enter admin key</h1>
+            <p style={{ fontFamily: MONO, fontSize: 10, color: PAGE_MUT, marginBottom: 24 }}>Access is gated. Your key is stored only in sessionStorage.</p>
             <input
               type="password"
               value={keyInput}
@@ -388,11 +391,11 @@ export function AdminPage() {
         <div className="home-dc-section" style={{ padding: '80px 34px', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
             <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '.14em', color: RED, textTransform: 'uppercase' }}>ADMIN DASHBOARD</span>
-            <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 28, color: INK, margin: '10px 0 6px' }}>Admin wallet required</h1>
-            <p style={{ fontFamily: MONO, fontSize: 10, color: MUT, marginBottom: 8, lineHeight: 1.7 }}>
+            <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 28, color: PAGE_INK, margin: '10px 0 6px' }}>Admin wallet required</h1>
+            <p style={{ fontFamily: MONO, fontSize: 10, color: PAGE_MUT, marginBottom: 8, lineHeight: 1.7 }}>
               This page is restricted to the contract owner wallet.
             </p>
-            <p style={{ fontFamily: MONO, fontSize: 9, color: INK, marginBottom: 24 }}>
+            <p style={{ fontFamily: MONO, fontSize: 9, color: PAGE_INK, marginBottom: 24 }}>
               Connected: <span style={{ color: RED }}>{short}</span>
             </p>
             <button
@@ -402,7 +405,7 @@ export function AdminPage() {
                 setKey('');
                 setAuthed(false);
               }}
-              style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '.1em', padding: '10px 24px', borderRadius: 8, background: 'transparent', border: `1px solid ${BD}`, color: MUT, cursor: 'pointer', textTransform: 'uppercase' }}
+              style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '.1em', padding: '10px 24px', borderRadius: 8, background: 'transparent', border: `1px solid ${BD}`, color: PAGE_MUT, cursor: 'pointer', textTransform: 'uppercase' }}
             >
               SIGN OUT
             </button>
@@ -420,7 +423,7 @@ export function AdminPage() {
         {/* Header */}
         <div style={{ marginBottom: 32 }}>
           <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '.14em', color: RED, textTransform: 'uppercase' }}>ADMIN DASHBOARD</span>
-          <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 'clamp(32px,4vw,52px)', color: INK, margin: '8px 0 0', lineHeight: 1.06, letterSpacing: '-.02em' }}>
+          <h1 style={{ fontFamily: SYNE, fontWeight: 800, fontSize: 'clamp(32px,4vw,52px)', color: PAGE_INK, margin: '8px 0 0', lineHeight: 1.06, letterSpacing: '-.02em' }}>
             System Control
           </h1>
         </div>
@@ -520,13 +523,13 @@ export function AdminPage() {
 
         {/* Pending projects */}
         <Reveal delay={80}>
-          <div style={{ fontFamily: MONO, fontSize: 8, letterSpacing: '.14em', color: MUT, marginBottom: 14, textTransform: 'uppercase' }}>
+          <div style={{ fontFamily: MONO, fontSize: 8, letterSpacing: '.14em', color: PAGE_MUT, marginBottom: 14, textTransform: 'uppercase' }}>
             Pending Projects — {loading ? '…' : projects.length} found
           </div>
         </Reveal>
 
         {loading && (
-          <div style={{ fontFamily: MONO, fontSize: 10, color: MUT, padding: '40px 0', textAlign: 'center', letterSpacing: '.08em' }}>
+          <div style={{ fontFamily: MONO, fontSize: 10, color: PAGE_MUT, padding: '40px 0', textAlign: 'center', letterSpacing: '.08em' }}>
             LOADING…
           </div>
         )}
@@ -556,16 +559,16 @@ export function AdminPage() {
         {/* Validator link note */}
         <Reveal delay={120}>
           <div style={{ marginTop: 32, background: `${GOLD}11`, border: `1px solid ${GOLD}33`, borderRadius: 10, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontFamily: MONO, fontSize: 9, color: GOLD, letterSpacing: '.08em' }}>
+            <span style={{ fontFamily: MONO, fontSize: 9, color: PAGE_GOLD, letterSpacing: '.08em' }}>
               VALIDATOR VOTES → use the{' '}
-              <a href="/validator" style={{ color: GOLD, textDecoration: 'underline' }}>Validator Dashboard</a>
+              <a href="/validator" style={{ color: PAGE_GOLD, textDecoration: 'underline' }}>Validator Dashboard</a>
               {' '}for the full voting interface.
             </span>
           </div>
         </Reveal>
       </div>
 
-      <div style={{ borderTop: `1px solid ${BD}`, fontFamily: MONO, fontSize: 7, letterSpacing: '.13em', textTransform: 'uppercase', color: MUT, padding: '20px 34px', textAlign: 'center' }}>
+      <div style={{ borderTop: `1px solid ${BD}`, fontFamily: MONO, fontSize: 7, letterSpacing: '.13em', textTransform: 'uppercase', color: PAGE_MUT, padding: '20px 34px', textAlign: 'center' }}>
         © 2026 SALX | SAOLA CARBON MARKETPLACE. POWERED BY ETHEREUM.
       </div>
     </div>
